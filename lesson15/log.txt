@@ -1,0 +1,7 @@
+hello 标准输出
+hello printf
+hello fprintf
+hello fputs
+hello printf
+hello fprintf
+hello fputs
