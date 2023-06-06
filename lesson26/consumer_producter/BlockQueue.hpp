@@ -66,20 +66,21 @@ namespace ns_blockqueue
         void Push(const T &in)
         {
             LockQueue();
-            if(IsFull()){  //bug?
+            while(IsFull()){
                 //等待的，把线程挂起，我们当前是持有锁的
                 ProducterWait();
             }
             // 向队列中放数据，生产函数
             bq_.push(in);
 
-           if(bq_.size() > cap_/2) WakeupConsumer();
+            //if(bq_.size() > cap_/2)
+            WakeupConsumer();
             UnlockQueue();
         }
         void Pop(T *out)
         {
             LockQueue();
-            if(IsEmpty()){  //bug?
+            while(IsEmpty()){  //bug?
                 //无法消费
                 ConsumerWait();
             }
@@ -87,7 +88,8 @@ namespace ns_blockqueue
             *out = bq_.front();
             bq_.pop();
 
-            if(bq_.size() < cap_/2 ) WakeupProducter();
+            //if(bq_.size() < cap_/2 )
+            WakeupProducter();
             UnlockQueue();
         }
     };
